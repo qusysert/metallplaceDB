@@ -2,23 +2,23 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/xuri/excelize/v2"
 	"metallplace/internal/app/model"
-	"metallplace/internal/app/repository"
 	"strconv"
 	"time"
 )
 
-func ProcessBook(ctx context.Context, book *excelize.File, materials []model.Material) error {
-	dateLayout := "05.01.2017"
+func (s *Service) InitialImport(ctx context.Context, book *excelize.File, materials []model.Material) error {
+	dateLayout := "2-Jan-06"
 
 	for _, material := range materials {
-		err := repository.AddMaterialAndSource(ctx, material)
+		err := s.repo.AddMaterialAndSource(ctx, material)
 		if err != nil {
 			return err
 		}
 
-		err = repository.AddProperties(ctx, material, material.Properties)
+		err = s.repo.AddProperties(ctx, material, material.Properties)
 		if err != nil {
 			return err
 		}
@@ -31,14 +31,22 @@ func ProcessBook(ctx context.Context, book *excelize.File, materials []model.Mat
 					return err
 				}
 
-				dateStr, err := book.GetCellValue(material.Sheet, material.DateColumn+strconv.Itoa(row))
+				dateCell := material.DateColumn + strconv.Itoa(row)
+				style, _ := book.NewStyle(`{"number_format":15}`)
+				book.SetCellStyle(material.Sheet, dateCell, dateCell, style)
+
+				dateStr, err := book.GetCellValue(material.Sheet, dateCell)
+				if err != nil {
+					return err
+				}
+				dateType, err := book.GetCellType(material.Sheet, dateCell)
 				if err != nil {
 					return err
 				}
 
 				createdOn, err := time.Parse(dateLayout, dateStr)
 				if err != nil {
-					return err
+					return fmt.Errorf("Can't parce date [%v,%v] '%v' (%v): %w", material.Sheet, dateCell, dateStr, dateType, err)
 				}
 
 				if value == "" {
@@ -56,7 +64,7 @@ func ProcessBook(ctx context.Context, book *excelize.File, materials []model.Mat
 					valueStr = value
 				}
 
-				err = repository.AddValue(ctx, material.Name, material.Source, property.Name,
+				err = s.repo.AddValue(ctx, material.Name, material.Source, property.Name,
 					valueDecimal, valueStr, createdOn)
 				if err != nil {
 					return err
