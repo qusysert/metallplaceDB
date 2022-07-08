@@ -48,13 +48,13 @@
         Content-Type: application/json
 
         {
-          "material_name": "Material 2",
-          "source_name": "website 2",
+          "material_source_id": "1",
           "property_name": "med_price",
-          "value_float": "99999",
+          "value_float": "100",
           "value_str": "",
-          "created_on": "2015-09-15T14:00:13Z"
+          "created_on": "2015-10-15T14:00:13Z"
         }
+
 
 - addUniqueMaterial - добавляет уникальную связку материала. На вход принимает название материала, источник, рынок торгов и валюту
 
