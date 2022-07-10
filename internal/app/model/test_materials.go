@@ -7,9 +7,8 @@ var TestMaterials = []Material{
 		"Global",
 		"usd/t",
 		"A",
-		[]Property{{"min_price", "C", 2, "decimal"},
-			{"max_price", "D", 2, "decimal"},
-			{"med_price", "E", 2, "decimal"},
+		[]Property{
+			{"med_price", "C", 2, "decimal"},
 		},
 	},
 
@@ -19,9 +18,9 @@ var TestMaterials = []Material{
 		"Global",
 		"usd/t",
 		"A",
-		[]Property{{"min_price", "I", 2, "decimal"},
-			{"max_price", "J", 2, "decimal"},
-			{"med_price", "K", 2, "decimal"},
+		[]Property{{"min_price", "F", 2, "decimal"},
+			{"max_price", "G", 2, "decimal"},
+			{"med_price", "H", 2, "decimal"},
 		},
 	},
 }
