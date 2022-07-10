@@ -9,12 +9,7 @@ import (
 )
 
 // AddMaterialValue Adding value to certain property of a product for a certain date
-func (r *Repository) AddMaterialValue(ctx context.Context, materialName, sourceName, propertyName string, valueFloat float64, valueStr string, createdOn time.Time) error {
-	materialSourceId, err := r.GetMaterialSourceId(ctx, materialName, sourceName)
-	if err != nil {
-		return fmt.Errorf("can't get source id %w", err)
-	}
-
+func (r *Repository) AddMaterialValue(ctx context.Context, materialSourceId int, propertyName string, valueFloat float64, valueStr string, createdOn time.Time) error {
 	propertyId, err := r.GetPropertyId(ctx, propertyName)
 	if err != nil {
 		return err

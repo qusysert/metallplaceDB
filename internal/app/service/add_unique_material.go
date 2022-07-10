@@ -20,7 +20,7 @@ func (s *Service) AddUniqueMaterial(ctx context.Context, materialName string, so
 	}
 
 	// tying material, source, unit and market - creating unique material
-	err = s.repo.AddMaterialSource(ctx, materialName, sourceName, materialMarket, materialUnit)
+	_, err = s.repo.AddMaterialSource(ctx, materialName, sourceName, materialMarket, materialUnit)
 
 	if err != nil {
 		return 0, fmt.Errorf("Can't tie material, source, unit and market %w", err)

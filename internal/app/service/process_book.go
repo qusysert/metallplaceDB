@@ -85,7 +85,12 @@ func (s *Service) InitialImport(ctx context.Context) error {
 					valueStr = value
 				}
 
-				err = s.repo.AddMaterialValue(ctx, material.Name, material.Source, property.Name, valueDecimal, valueStr, createdOn)
+				materialSourceId, err := s.repo.AddMaterialSource(ctx, material.Name, material.Source, material.Market, material.Unit)
+				if err != nil {
+					return fmt.Errorf("cant get materialSourceId: %v", err)
+				}
+
+				err = s.repo.AddMaterialValue(ctx, materialSourceId, property.Name, valueDecimal, valueStr, createdOn)
 				if err != nil {
 					return err
 				}
